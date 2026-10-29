@@ -5,238 +5,235 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Påmelding</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --krem: #FAF7F2;
-    --papir: #F3EEE5;
-    --brun: #5C4B3A;
-    --mork: #2E251C;
-    --dempet: #8C7B69;
-    --linje: #DDD3C4;
-    --aksent: #A0522D;
-    --serif: "EB Garamond", Georgia, serif;
+    --bg: #2B282C;
+    --bg2: #343135;
+    --kort: rgba(255,255,255,.04);
+    --kant: rgba(255,255,255,.09);
+    --tekst: #F4F2F4;
+    --dempet: #A7A2A8;
+    --svak: #7C777D;
+    --aksent: #E9B8FF;
+    --mono: "Space Mono", ui-monospace, monospace;
+    --sans: Inter, system-ui, -apple-system, sans-serif;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { height: 100%; }
   body {
-    background: var(--krem);
-    color: var(--mork);
-    font-family: var(--serif);
-    -webkit-font-smoothing: antialiased;
-    overflow: hidden;
+    background: var(--bg);
+    background-image: radial-gradient(1200px 600px at 20% -10%, rgba(233,184,255,.08), transparent 60%);
+    color: var(--tekst); font-family: var(--sans); font-size: 17px; line-height: 1.55;
+    -webkit-font-smoothing: antialiased; min-height: 100vh;
   }
+  a { color: inherit; }
 
-  .fremdrift { position: fixed; top: 0; left: 0; right: 0; height: 3px; background: var(--linje); z-index: 5; }
-  .fremdrift span { display: block; height: 100%; width: 0; background: var(--brun); transition: width .6s cubic-bezier(.2,.8,.2,1); }
+  header { display: flex; justify-content: space-between; align-items: center; padding: 18px 24px; font-size: 15px; color: var(--dempet); }
+  header .logo { font-family: var(--mono); font-weight: 700; color: var(--tekst); font-size: 18px; }
 
-  .scene { position: relative; height: 100%; max-width: 680px; margin: 0 auto; padding: 0 24px; }
-  .steg {
-    position: absolute; inset: 0; padding: 0 24px;
-    display: flex; flex-direction: column; justify-content: center;
-    opacity: 0; transform: translateY(40px); pointer-events: none;
-    transition: opacity .5s ease, transform .6s cubic-bezier(.2,.8,.2,1);
+  .side {
+    max-width: 1040px; margin: 0 auto; padding: 32px 24px 96px;
+    display: grid; grid-template-columns: 340px 1fr; gap: 48px; align-items: start;
   }
-  .steg.aktiv { opacity: 1; transform: none; pointer-events: auto; }
-  .steg.forbi { opacity: 0; transform: translateY(-40px); }
+  @media (max-width: 820px) { .side { grid-template-columns: 1fr; gap: 28px; padding-top: 8px; } }
 
-  .tall { font-size: 15px; color: var(--dempet); letter-spacing: .08em; margin-bottom: 18px; }
-  .tall b { color: var(--aksent); font-weight: 500; }
-  h1 { font-size: clamp(40px, 8vw, 64px); font-weight: 400; line-height: 1.05; letter-spacing: -.01em; color: var(--brun); }
-  h1 em { color: var(--aksent); }
-  h2 { font-size: clamp(28px, 5.5vw, 40px); font-weight: 400; line-height: 1.15; color: var(--mork); }
-  .ingress { font-size: 21px; line-height: 1.5; color: var(--brun); margin-top: 20px; max-width: 30ch; }
-  .hint { font-size: 17px; color: var(--dempet); margin-top: 10px; font-style: italic; }
-  .fakta { display: flex; gap: 28px; flex-wrap: wrap; margin-top: 32px; font-size: 17px; color: var(--brun); }
-  .fakta div span { display: block; font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--dempet); margin-bottom: 4px; }
-
-  input, textarea {
-    width: 100%; margin-top: 28px;
-    font: inherit; font-size: clamp(24px, 4.5vw, 32px); color: var(--mork);
-    background: transparent; border: none; border-bottom: 1.5px solid var(--linje);
-    padding: 8px 0 12px; outline: none; border-radius: 0;
-    transition: border-color .3s;
+  /* Venstre */
+  .cover {
+    aspect-ratio: 1; border-radius: 14px; overflow: hidden; position: relative;
+    background:
+      radial-gradient(circle at 30% 30%, #FF7AD9 0, transparent 40%),
+      radial-gradient(circle at 75% 65%, #7A5CFF 0, transparent 45%),
+      radial-gradient(circle at 50% 100%, #FFB36B 0, transparent 50%),
+      #1B1820;
+    box-shadow: 0 24px 60px rgba(0,0,0,.35);
   }
-  textarea { resize: none; height: 1.5em; line-height: 1.3; }
-  input::placeholder, textarea::placeholder { color: #C9BCAA; }
-  input:focus, textarea:focus { border-bottom-color: var(--brun); }
-  .feil input, .feil textarea { border-bottom-color: var(--aksent); animation: rist .35s; }
-  .feilmelding { color: var(--aksent); font-size: 16px; margin-top: 10px; min-height: 22px; }
-  @keyframes rist { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+  .cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .cover .stjerner { position: absolute; inset: 0; background-image: radial-gradient(rgba(255,255,255,.7) 1px, transparent 1.5px); background-size: 22px 22px; mask-image: radial-gradient(circle at 50% 40%, #000, transparent 70%); opacity: .35; }
+  .cover .ord { position: absolute; left: 22px; bottom: 18px; font-family: var(--mono); font-weight: 700; font-size: 44px; line-height: 1; letter-spacing: -.02em; text-shadow: 0 4px 30px rgba(0,0,0,.4); }
 
-  .valg { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
-  .valg button {
-    font: inherit; font-size: 22px; color: var(--brun);
-    background: var(--papir); border: 1.5px solid var(--linje); border-radius: 999px;
-    min-width: 64px; height: 56px; padding: 0 22px; cursor: pointer;
-    transition: all .2s;
-  }
-  .valg button:hover { border-color: var(--brun); }
-  .valg button.valgt { background: var(--brun); border-color: var(--brun); color: var(--krem); }
+  .seksjon-tittel { font-size: 14px; color: var(--dempet); font-weight: 500; padding-bottom: 10px; border-bottom: 1px solid var(--kant); margin: 28px 0 14px; }
+  .vert { display: flex; align-items: center; gap: 10px; font-weight: 500; margin-bottom: 12px; }
+  .avatar { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 600; color: #2B282C; }
+  .lenker { margin-top: 22px; display: grid; gap: 8px; font-size: 15px; color: var(--svak); }
+  .lenker a { text-decoration: none; }
+  .lenker a:hover { color: var(--dempet); }
 
-  .rad { display: flex; align-items: center; gap: 18px; margin-top: 36px; }
+  /* Høyre */
+  .merke { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: var(--aksent); background: rgba(233,184,255,.12); padding: 4px 10px; border-radius: 6px; }
+  h1 { font-family: var(--mono); font-weight: 700; font-size: clamp(38px, 6vw, 56px); line-height: 1.08; letter-spacing: -.02em; margin: 14px 0 26px; }
+
+  .info { display: flex; gap: 14px; align-items: center; margin-bottom: 18px; }
+  .ikon { width: 46px; height: 46px; border: 1px solid var(--kant); border-radius: 10px; display: grid; place-items: center; flex: none; overflow: hidden; }
+  .ikon.dato { flex-direction: column; display: flex; }
+  .ikon.dato small { display: block; width: 100%; text-align: center; font-size: 10px; letter-spacing: .06em; color: var(--dempet); background: rgba(255,255,255,.05); padding: 2px 0; font-weight: 600; }
+  .ikon.dato span { flex: 1; display: grid; place-items: center; font-weight: 500; font-size: 17px; }
+  .ikon svg { width: 20px; height: 20px; stroke: var(--dempet); }
+  .info b { display: block; font-family: var(--mono); font-weight: 700; font-size: 17px; }
+  .info .sub { font-size: 15px; color: var(--dempet); }
+
+  .kort { border: 1px solid var(--kant); background: var(--kort); border-radius: 14px; overflow: hidden; margin: 28px 0 36px; }
+  .kort-topp { font-family: var(--mono); font-size: 15px; color: var(--dempet); padding: 10px 18px; background: rgba(255,255,255,.04); border-bottom: 1px solid var(--kant); }
+  .kort-rad { display: flex; gap: 14px; padding: 16px 18px; border-bottom: 1px solid var(--kant); }
+  .kort-rad .ikon { width: 34px; height: 34px; border: none; background: rgba(255,255,255,.06); }
+  .kort-rad .ikon svg { width: 17px; height: 17px; }
+  .kort-rad b { font-family: var(--mono); font-size: 16px; }
+  .kort-rad p { font-size: 15px; color: var(--dempet); }
+  .kort-innhold { padding: 18px; }
+
   .knapp {
-    font: inherit; font-size: 19px; letter-spacing: .02em;
-    background: var(--brun); color: var(--krem); border: none; border-radius: 999px;
-    height: 54px; padding: 0 30px; cursor: pointer;
-    transition: transform .15s, background .2s;
+    width: 100%; height: 46px; border: none; border-radius: 9px; cursor: pointer;
+    background: var(--tekst); color: #1E1C1F; font: 500 16px var(--sans);
+    transition: transform .12s, opacity .2s;
   }
-  .knapp:hover { background: var(--mork); }
-  .knapp:active { transform: scale(.97); }
-  .knapp:disabled { opacity: .6; cursor: default; }
-  .enter { font-size: 15px; color: var(--dempet); }
-  .enter kbd { font-family: inherit; border: 1px solid var(--linje); border-radius: 4px; padding: 1px 6px; }
-  .tilbake {
-    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
-    font: inherit; font-size: 16px; color: var(--dempet); background: none; border: none; cursor: pointer;
-    opacity: 0; transition: opacity .3s;
-  }
-  .tilbake.vis { opacity: 1; }
+  .knapp:hover { opacity: .9; }
+  .knapp:active { transform: scale(.985); }
+  .knapp:disabled { opacity: .55; cursor: default; }
 
-  .takk h1 { font-size: clamp(52px, 11vw, 88px); }
-  .segl {
-    width: 72px; height: 72px; border-radius: 50%; border: 1.5px solid var(--brun);
-    display: grid; place-items: center; margin-bottom: 28px;
-  }
-  .segl svg { width: 30px; stroke: var(--brun); stroke-dasharray: 40; stroke-dashoffset: 40; }
-  .takk.aktiv .segl svg { animation: tegn .7s .3s forwards; }
-  @keyframes tegn { to { stroke-dashoffset: 0; } }
+  .om p { margin-bottom: 18px; color: #E4E1E5; }
 
-  @media (max-width: 520px) { .enter { display: none; } }
-  @media (prefers-reduced-motion: reduce) { .steg { transition: opacity .2s; transform: none !important; } }
+  /* Påmeldingsskjema i kortet */
+  .skjema { display: none; }
+  .apen .intro { display: none; }
+  .apen .skjema { display: block; animation: inn .35s cubic-bezier(.2,.8,.2,1); }
+  @keyframes inn { from { opacity: 0; transform: translateY(8px); } }
+  label { display: block; font-size: 14px; font-weight: 500; color: var(--dempet); margin: 0 0 6px; }
+  .felt { margin-bottom: 14px; }
+  input, textarea {
+    width: 100%; font: 16px var(--sans); color: var(--tekst);
+    background: rgba(0,0,0,.18); border: 1px solid var(--kant); border-radius: 9px;
+    padding: 11px 13px; outline: none; transition: border-color .2s, background .2s;
+  }
+  textarea { resize: vertical; min-height: 80px; }
+  input:focus, textarea:focus { border-color: rgba(233,184,255,.6); background: rgba(0,0,0,.25); }
+  input::placeholder, textarea::placeholder { color: var(--svak); }
+  .feil input { border-color: #FF8A8A; }
+  .valg { display: flex; gap: 8px; }
+  .valg button {
+    flex: 1; height: 42px; border-radius: 9px; cursor: pointer;
+    background: rgba(0,0,0,.18); border: 1px solid var(--kant); color: var(--tekst); font: 500 15px var(--sans);
+    transition: all .15s;
+  }
+  .valg button.valgt { background: var(--tekst); color: #1E1C1F; border-color: var(--tekst); }
+  .melding { font-size: 14px; color: #FF8A8A; min-height: 20px; margin: -4px 0 8px; }
+
+  /* Ferdig */
+  .ferdig { display: none; text-align: left; }
+  .sendt .intro, .sendt .skjema { display: none; }
+  .sendt .ferdig { display: block; animation: inn .4s cubic-bezier(.2,.8,.2,1); }
+  .ferdig .hake { width: 44px; height: 44px; border-radius: 50%; background: rgba(233,184,255,.15); display: grid; place-items: center; margin-bottom: 12px; }
+  .ferdig .hake svg { width: 22px; stroke: var(--aksent); }
+  .ferdig b { font-family: var(--mono); font-size: 20px; display: block; margin-bottom: 4px; }
+  .ferdig p { color: var(--dempet); font-size: 15px; }
 </style>
 </head>
 <body>
-<div class="fremdrift"><span id="bar"></span></div>
+<header>
+  <span class="logo">påmelding*</span>
+  <span id="klokke"></span>
+</header>
 
-<form class="scene" id="skjema" novalidate>
-  <!-- 0: Forside -->
-  <section class="steg aktiv">
-    <p class="tall">PÅMELDING</p>
-    <h1>Bli med på <em>noe fint</em>.</h1>
-    <p class="ingress">Én setning om hva dette er, og hvorfor du bør komme.</p>
-    <div class="fakta">
-      <div><span>Når</span>Lørdag 14. november</div>
-      <div><span>Hvor</span>Oslo</div>
-      <div><span>Frist</span>7. november</div>
+<main class="side">
+  <aside>
+    <div class="cover">
+      <!-- Bytt til eget bilde: <img src="cover.jpg" alt=""> -->
+      <div class="stjerner"></div>
+      <div class="ord">Tittel<br>her.</div>
     </div>
-    <div class="rad"><button type="button" class="knapp" data-neste>Meld deg på</button><span class="enter">eller trykk <kbd>Enter</kbd></span></div>
-  </section>
 
-  <!-- 1: Navn -->
-  <section class="steg" data-felt="navn">
-    <p class="tall"><b>1</b> → 4</p>
-    <h2>Hva heter du?</h2>
-    <input name="navn" autocomplete="name" placeholder="Fornavn og etternavn" required>
-    <p class="feilmelding"></p>
-    <div class="rad"><button type="button" class="knapp" data-neste>OK</button><span class="enter">trykk <kbd>Enter</kbd></span></div>
-  </section>
+    <p class="seksjon-tittel">Arrangert av</p>
+    <div class="vert"><span class="avatar" style="background:#FFB3D9">JB</span>Jonas Bech</div>
 
-  <!-- 2: E-post -->
-  <section class="steg" data-felt="epost">
-    <p class="tall"><b>2</b> → 4</p>
-    <h2>Hvor kan vi nå deg?</h2>
-    <p class="hint">Du får en bekreftelse hit.</p>
-    <input name="epost" type="email" autocomplete="email" inputmode="email" placeholder="navn@epost.no" required>
-    <p class="feilmelding"></p>
-    <div class="rad"><button type="button" class="knapp" data-neste>OK</button><span class="enter">trykk <kbd>Enter</kbd></span></div>
-  </section>
-
-  <!-- 3: Antall -->
-  <section class="steg" data-felt="antall">
-    <p class="tall"><b>3</b> → 4</p>
-    <h2>Hvor mange blir dere?</h2>
-    <div class="valg" data-valg="antall">
-      <button type="button">1</button><button type="button">2</button><button type="button">3</button><button type="button">4+</button>
+    <div class="lenker">
+      <a href="mailto:jonas@villoid.com">Kontakt arrangøren</a>
     </div>
-    <input type="hidden" name="antall" required>
-    <p class="feilmelding"></p>
-  </section>
+  </aside>
 
-  <!-- 4: Kommentar -->
-  <section class="steg" data-felt="kommentar">
-    <p class="tall"><b>4</b> → 4</p>
-    <h2>Noe vi bør vite?</h2>
-    <p class="hint">Allergier, spørsmål, hilsener. Helt valgfritt.</p>
-    <textarea name="kommentar" rows="1" placeholder="Skriv her…"></textarea>
-    <p class="feilmelding"></p>
-    <div class="rad"><button type="submit" class="knapp" id="send">Send påmelding</button><span class="enter"><kbd>Enter</kbd></span></div>
-  </section>
+  <section>
+    <span class="merke">✦ Privat arrangement</span>
+    <h1>Tittel på arrangementet</h1>
 
-  <!-- 5: Takk -->
-  <section class="steg takk">
-    <div class="segl"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
-    <h1>Takk, <em id="fornavn">du</em>.</h1>
-    <p class="ingress">Du er påmeldt. Vi gleder oss til å se deg.</p>
-  </section>
-</form>
+    <div class="info">
+      <div class="ikon dato"><small>NOV</small><span>14</span></div>
+      <div><b>lørdag 14. november</b><span class="sub">19:00 – 23:30</span></div>
+    </div>
+    <div class="info">
+      <div class="ikon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></div>
+      <div><b>Stedsnavn</b><span class="sub">Oslo, Norge</span></div>
+    </div>
 
-<button class="tilbake" id="tilbake" type="button">↑ Tilbake</button>
+    <div class="kort" id="kort">
+      <div class="kort-topp">Påmelding</div>
+      <div class="kort-rad">
+        <div class="ikon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c.8-3.5 3.6-5.5 7-5.5s6.2 2 7 5.5"/></svg></div>
+        <div><b>Begrenset antall plasser</b><p>Meld deg på innen 7. november.</p></div>
+      </div>
+      <div class="kort-innhold">
+        <div class="intro">
+          <p style="margin-bottom:16px">Velkommen! Meld deg på nedenfor, så holder vi av en plass til deg.</p>
+          <button class="knapp" id="apne" type="button">Meld deg på</button>
+        </div>
+
+        <form class="skjema" id="skjema" novalidate>
+          <div class="felt"><label for="navn">Navn</label><input id="navn" name="navn" autocomplete="name" placeholder="Fornavn og etternavn" required></div>
+          <div class="felt"><label for="epost">E-post</label><input id="epost" name="epost" type="email" autocomplete="email" placeholder="navn@epost.no" required></div>
+          <div class="felt">
+            <label>Hvor mange blir dere?</label>
+            <div class="valg" id="valg"><button type="button" class="valgt">1</button><button type="button">2</button><button type="button">3</button><button type="button">4+</button></div>
+            <input type="hidden" name="antall" value="1">
+          </div>
+          <div class="felt"><label for="kommentar">Noe vi bør vite? <span style="color:var(--svak);font-weight:400">(valgfritt)</span></label><textarea id="kommentar" name="kommentar" placeholder="Allergier, spørsmål, hilsener"></textarea></div>
+          <p class="melding" id="melding"></p>
+          <button class="knapp" id="send" type="submit">Send påmelding</button>
+        </form>
+
+        <div class="ferdig">
+          <div class="hake"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+          <b>Du er påmeldt, <span id="fornavn"></span>.</b>
+          <p>Vi gleder oss til å se deg.</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="seksjon-tittel">Om arrangementet</p>
+    <div class="om">
+      <p>Første avsnitt. Én kort, sterk setning som får folk til å ville komme.</p>
+      <p>Andre avsnitt. Hva skjer, hvem kommer, og hvorfor det er verdt kvelden.</p>
+      <p>Avslutning. Plassene er begrenset. Vi gleder oss til å se deg!</p>
+    </div>
+  </section>
+</main>
 
 <script>
   // Lim inn nettapp-URL-en fra Apps Script her.
   const ENDPOINT = '';
 
-  const steg = [...document.querySelectorAll('.steg')];
-  const bar = document.getElementById('bar');
-  const tilbake = document.getElementById('tilbake');
+  const kort = document.getElementById('kort');
   const skjema = document.getElementById('skjema');
-  const sisteSporsmal = steg.length - 2;
-  let n = 0;
+  const melding = document.getElementById('melding');
 
-  function vis(i) {
-    steg.forEach((s, j) => {
-      s.classList.toggle('aktiv', j === i);
-      s.classList.toggle('forbi', j < i);
-    });
-    n = i;
-    bar.style.width = (Math.min(i, sisteSporsmal) / sisteSporsmal * 100) + '%';
-    if (i === steg.length - 1) bar.style.width = '100%';
-    tilbake.classList.toggle('vis', i > 0 && i < steg.length - 1);
-    const felt = steg[i].querySelector('input:not([type=hidden]), textarea');
-    if (felt) setTimeout(() => felt.focus({ preventScroll: true }), 350);
-  }
+  const klokke = document.getElementById('klokke');
+  const tikk = () => klokke.textContent = new Date().toLocaleTimeString('no-NO', { hour: '2-digit', minute: '2-digit' }) + ' CET';
+  tikk(); setInterval(tikk, 30000);
 
-  function gyldig(s) {
-    const felt = s.querySelector('input, textarea');
-    const melding = s.querySelector('.feilmelding');
-    if (!felt) return true;
-    let feil = '';
-    if (felt.required && !felt.value.trim()) feil = felt.type === 'hidden' ? 'Velg ett av alternativene.' : 'Denne må fylles ut.';
-    else if (felt.type === 'email' && !/^\S+@\S+\.\S+$/.test(felt.value)) feil = 'Det ser ikke ut som en e-postadresse.';
-    s.classList.remove('feil');
-    if (feil) { void s.offsetWidth; s.classList.add('feil'); }
-    melding.textContent = feil;
-    return !feil;
-  }
-
-  function neste() {
-    if (n >= sisteSporsmal) return;
-    if (gyldig(steg[n])) vis(n + 1);
-  }
-
-  document.querySelectorAll('[data-neste]').forEach(b => b.addEventListener('click', neste));
-  tilbake.addEventListener('click', () => n > 0 && vis(n - 1));
-
-  document.querySelectorAll('[data-valg]').forEach(gruppe => {
-    const skjult = skjema.elements[gruppe.dataset.valg];
-    gruppe.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
-      gruppe.querySelectorAll('button').forEach(x => x.classList.toggle('valgt', x === b));
-      skjult.value = b.textContent;
-      steg[n].querySelector('.feilmelding').textContent = '';
-      setTimeout(neste, 280);
-    }));
+  document.getElementById('apne').addEventListener('click', () => {
+    kort.classList.add('apen');
+    setTimeout(() => document.getElementById('navn').focus(), 50);
   });
 
-  document.addEventListener('keydown', e => {
-    if (e.key !== 'Enter' || e.shiftKey) return;
-    e.preventDefault();
-    if (n === sisteSporsmal) skjema.requestSubmit();
-    else neste();
-  });
+  document.querySelectorAll('#valg button').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('#valg button').forEach(x => x.classList.toggle('valgt', x === b));
+    skjema.elements.antall.value = b.textContent;
+  }));
 
   skjema.addEventListener('submit', async e => {
     e.preventDefault();
+    const navn = skjema.elements.navn, epost = skjema.elements.epost;
+    navn.parentNode.classList.toggle('feil', !navn.value.trim());
+    epost.parentNode.classList.toggle('feil', !/^\S+@\S+\.\S+$/.test(epost.value));
+    if (!navn.value.trim()) return melding.textContent = 'Skriv inn navnet ditt.';
+    if (!/^\S+@\S+\.\S+$/.test(epost.value)) return melding.textContent = 'Det ser ikke ut som en e-postadresse.';
+    melding.textContent = '';
+
     const knapp = document.getElementById('send');
     knapp.disabled = true; knapp.textContent = 'Sender…';
     const data = Object.fromEntries(new FormData(skjema));
@@ -245,10 +242,10 @@
         await fetch(ENDPOINT, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(data) });
       }
       document.getElementById('fornavn').textContent = data.navn.trim().split(' ')[0];
-      vis(steg.length - 1);
+      kort.classList.add('sendt');
     } catch {
       knapp.disabled = false; knapp.textContent = 'Prøv igjen';
-      steg[n].querySelector('.feilmelding').textContent = 'Noe gikk galt. Sjekk nettet og prøv igjen.';
+      melding.textContent = 'Noe gikk galt. Sjekk nettet og prøv igjen.';
     }
   });
 </script>
