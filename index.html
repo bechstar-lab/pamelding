@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Påmelding</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --krem: #FAF7F2;
+    --papir: #F3EEE5;
+    --brun: #5C4B3A;
+    --mork: #2E251C;
+    --dempet: #8C7B69;
+    --linje: #DDD3C4;
+    --aksent: #A0522D;
+    --serif: "EB Garamond", Georgia, serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    background: var(--krem);
+    color: var(--mork);
+    font-family: var(--serif);
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+
+  .fremdrift { position: fixed; top: 0; left: 0; right: 0; height: 3px; background: var(--linje); z-index: 5; }
+  .fremdrift span { display: block; height: 100%; width: 0; background: var(--brun); transition: width .6s cubic-bezier(.2,.8,.2,1); }
+
+  .scene { position: relative; height: 100%; max-width: 680px; margin: 0 auto; padding: 0 24px; }
+  .steg {
+    position: absolute; inset: 0; padding: 0 24px;
+    display: flex; flex-direction: column; justify-content: center;
+    opacity: 0; transform: translateY(40px); pointer-events: none;
+    transition: opacity .5s ease, transform .6s cubic-bezier(.2,.8,.2,1);
+  }
+  .steg.aktiv { opacity: 1; transform: none; pointer-events: auto; }
+  .steg.forbi { opacity: 0; transform: translateY(-40px); }
+
+  .tall { font-size: 15px; color: var(--dempet); letter-spacing: .08em; margin-bottom: 18px; }
+  .tall b { color: var(--aksent); font-weight: 500; }
+  h1 { font-size: clamp(40px, 8vw, 64px); font-weight: 400; line-height: 1.05; letter-spacing: -.01em; color: var(--brun); }
+  h1 em { color: var(--aksent); }
+  h2 { font-size: clamp(28px, 5.5vw, 40px); font-weight: 400; line-height: 1.15; color: var(--mork); }
+  .ingress { font-size: 21px; line-height: 1.5; color: var(--brun); margin-top: 20px; max-width: 30ch; }
+  .hint { font-size: 17px; color: var(--dempet); margin-top: 10px; font-style: italic; }
+  .fakta { display: flex; gap: 28px; flex-wrap: wrap; margin-top: 32px; font-size: 17px; color: var(--brun); }
+  .fakta div span { display: block; font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--dempet); margin-bottom: 4px; }
+
+  input, textarea {
+    width: 100%; margin-top: 28px;
+    font: inherit; font-size: clamp(24px, 4.5vw, 32px); color: var(--mork);
+    background: transparent; border: none; border-bottom: 1.5px solid var(--linje);
+    padding: 8px 0 12px; outline: none; border-radius: 0;
+    transition: border-color .3s;
+  }
+  textarea { resize: none; height: 1.5em; line-height: 1.3; }
+  input::placeholder, textarea::placeholder { color: #C9BCAA; }
+  input:focus, textarea:focus { border-bottom-color: var(--brun); }
+  .feil input, .feil textarea { border-bottom-color: var(--aksent); animation: rist .35s; }
+  .feilmelding { color: var(--aksent); font-size: 16px; margin-top: 10px; min-height: 22px; }
+  @keyframes rist { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+
+  .valg { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+  .valg button {
+    font: inherit; font-size: 22px; color: var(--brun);
+    background: var(--papir); border: 1.5px solid var(--linje); border-radius: 999px;
+    min-width: 64px; height: 56px; padding: 0 22px; cursor: pointer;
+    transition: all .2s;
+  }
+  .valg button:hover { border-color: var(--brun); }
+  .valg button.valgt { background: var(--brun); border-color: var(--brun); color: var(--krem); }
+
+  .rad { display: flex; align-items: center; gap: 18px; margin-top: 36px; }
+  .knapp {
+    font: inherit; font-size: 19px; letter-spacing: .02em;
+    background: var(--brun); color: var(--krem); border: none; border-radius: 999px;
+    height: 54px; padding: 0 30px; cursor: pointer;
+    transition: transform .15s, background .2s;
+  }
+  .knapp:hover { background: var(--mork); }
+  .knapp:active { transform: scale(.97); }
+  .knapp:disabled { opacity: .6; cursor: default; }
+  .enter { font-size: 15px; color: var(--dempet); }
+  .enter kbd { font-family: inherit; border: 1px solid var(--linje); border-radius: 4px; padding: 1px 6px; }
+  .tilbake {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    font: inherit; font-size: 16px; color: var(--dempet); background: none; border: none; cursor: pointer;
+    opacity: 0; transition: opacity .3s;
+  }
+  .tilbake.vis { opacity: 1; }
+
+  .takk h1 { font-size: clamp(52px, 11vw, 88px); }
+  .segl {
+    width: 72px; height: 72px; border-radius: 50%; border: 1.5px solid var(--brun);
+    display: grid; place-items: center; margin-bottom: 28px;
+  }
+  .segl svg { width: 30px; stroke: var(--brun); stroke-dasharray: 40; stroke-dashoffset: 40; }
+  .takk.aktiv .segl svg { animation: tegn .7s .3s forwards; }
+  @keyframes tegn { to { stroke-dashoffset: 0; } }
+
+  @media (max-width: 520px) { .enter { display: none; } }
+  @media (prefers-reduced-motion: reduce) { .steg { transition: opacity .2s; transform: none !important; } }
+</style>
+</head>
+<body>
+<div class="fremdrift"><span id="bar"></span></div>
+
+<form class="scene" id="skjema" novalidate>
+  <!-- 0: Forside -->
+  <section class="steg aktiv">
+    <p class="tall">PÅMELDING</p>
+    <h1>Bli med på <em>noe fint</em>.</h1>
+    <p class="ingress">Én setning om hva dette er, og hvorfor du bør komme.</p>
+    <div class="fakta">
+      <div><span>Når</span>Lørdag 14. november</div>
+      <div><span>Hvor</span>Oslo</div>
+      <div><span>Frist</span>7. november</div>
+    </div>
+    <div class="rad"><button type="button" class="knapp" data-neste>Meld deg på</button><span class="enter">eller trykk <kbd>Enter</kbd></span></div>
+  </section>
+
+  <!-- 1: Navn -->
+  <section class="steg" data-felt="navn">
+    <p class="tall"><b>1</b> → 4</p>
+    <h2>Hva heter du?</h2>
+    <input name="navn" autocomplete="name" placeholder="Fornavn og etternavn" required>
+    <p class="feilmelding"></p>
+    <div class="rad"><button type="button" class="knapp" data-neste>OK</button><span class="enter">trykk <kbd>Enter</kbd></span></div>
+  </section>
+
+  <!-- 2: E-post -->
+  <section class="steg" data-felt="epost">
+    <p class="tall"><b>2</b> → 4</p>
+    <h2>Hvor kan vi nå deg?</h2>
+    <p class="hint">Du får en bekreftelse hit.</p>
+    <input name="epost" type="email" autocomplete="email" inputmode="email" placeholder="navn@epost.no" required>
+    <p class="feilmelding"></p>
+    <div class="rad"><button type="button" class="knapp" data-neste>OK</button><span class="enter">trykk <kbd>Enter</kbd></span></div>
+  </section>
+
+  <!-- 3: Antall -->
+  <section class="steg" data-felt="antall">
+    <p class="tall"><b>3</b> → 4</p>
+    <h2>Hvor mange blir dere?</h2>
+    <div class="valg" data-valg="antall">
+      <button type="button">1</button><button type="button">2</button><button type="button">3</button><button type="button">4+</button>
+    </div>
+    <input type="hidden" name="antall" required>
+    <p class="feilmelding"></p>
+  </section>
+
+  <!-- 4: Kommentar -->
+  <section class="steg" data-felt="kommentar">
+    <p class="tall"><b>4</b> → 4</p>
+    <h2>Noe vi bør vite?</h2>
+    <p class="hint">Allergier, spørsmål, hilsener. Helt valgfritt.</p>
+    <textarea name="kommentar" rows="1" placeholder="Skriv her…"></textarea>
+    <p class="feilmelding"></p>
+    <div class="rad"><button type="submit" class="knapp" id="send">Send påmelding</button><span class="enter"><kbd>Enter</kbd></span></div>
+  </section>
+
+  <!-- 5: Takk -->
+  <section class="steg takk">
+    <div class="segl"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+    <h1>Takk, <em id="fornavn">du</em>.</h1>
+    <p class="ingress">Du er påmeldt. Vi gleder oss til å se deg.</p>
+  </section>
+</form>
+
+<button class="tilbake" id="tilbake" type="button">↑ Tilbake</button>
+
+<script>
+  // Lim inn nettapp-URL-en fra Apps Script her.
+  const ENDPOINT = '';
+
+  const steg = [...document.querySelectorAll('.steg')];
+  const bar = document.getElementById('bar');
+  const tilbake = document.getElementById('tilbake');
+  const skjema = document.getElementById('skjema');
+  const sisteSporsmal = steg.length - 2;
+  let n = 0;
+
+  function vis(i) {
+    steg.forEach((s, j) => {
+      s.classList.toggle('aktiv', j === i);
+      s.classList.toggle('forbi', j < i);
+    });
+    n = i;
+    bar.style.width = (Math.min(i, sisteSporsmal) / sisteSporsmal * 100) + '%';
+    if (i === steg.length - 1) bar.style.width = '100%';
+    tilbake.classList.toggle('vis', i > 0 && i < steg.length - 1);
+    const felt = steg[i].querySelector('input:not([type=hidden]), textarea');
+    if (felt) setTimeout(() => felt.focus({ preventScroll: true }), 350);
+  }
+
+  function gyldig(s) {
+    const felt = s.querySelector('input, textarea');
+    const melding = s.querySelector('.feilmelding');
+    if (!felt) return true;
+    let feil = '';
+    if (felt.required && !felt.value.trim()) feil = felt.type === 'hidden' ? 'Velg ett av alternativene.' : 'Denne må fylles ut.';
+    else if (felt.type === 'email' && !/^\S+@\S+\.\S+$/.test(felt.value)) feil = 'Det ser ikke ut som en e-postadresse.';
+    s.classList.remove('feil');
+    if (feil) { void s.offsetWidth; s.classList.add('feil'); }
+    melding.textContent = feil;
+    return !feil;
+  }
+
+  function neste() {
+    if (n >= sisteSporsmal) return;
+    if (gyldig(steg[n])) vis(n + 1);
+  }
+
+  document.querySelectorAll('[data-neste]').forEach(b => b.addEventListener('click', neste));
+  tilbake.addEventListener('click', () => n > 0 && vis(n - 1));
+
+  document.querySelectorAll('[data-valg]').forEach(gruppe => {
+    const skjult = skjema.elements[gruppe.dataset.valg];
+    gruppe.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+      gruppe.querySelectorAll('button').forEach(x => x.classList.toggle('valgt', x === b));
+      skjult.value = b.textContent;
+      steg[n].querySelector('.feilmelding').textContent = '';
+      setTimeout(neste, 280);
+    }));
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Enter' || e.shiftKey) return;
+    e.preventDefault();
+    if (n === sisteSporsmal) skjema.requestSubmit();
+    else neste();
+  });
+
+  skjema.addEventListener('submit', async e => {
+    e.preventDefault();
+    const knapp = document.getElementById('send');
+    knapp.disabled = true; knapp.textContent = 'Sender…';
+    const data = Object.fromEntries(new FormData(skjema));
+    try {
+      if (ENDPOINT) {
+        await fetch(ENDPOINT, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(data) });
+      }
+      document.getElementById('fornavn').textContent = data.navn.trim().split(' ')[0];
+      vis(steg.length - 1);
+    } catch {
+      knapp.disabled = false; knapp.textContent = 'Prøv igjen';
+      steg[n].querySelector('.feilmelding').textContent = 'Noe gikk galt. Sjekk nettet og prøv igjen.';
+    }
+  });
+</script>
+</body>
+</html>
