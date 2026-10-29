@@ -1,0 +1,6 @@
+name = "pamelding"
+main = "worker.js"
+compatibility_date = "2025-09-01"
+
+[vars]
+SHEET_ID = "1aQ5-BRsHbqw9SI9CeHVXP1tYD-wbOFr9fielF4cSeDQ"
